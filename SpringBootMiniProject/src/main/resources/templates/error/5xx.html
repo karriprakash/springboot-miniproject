@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org">
+<head>
+<meta charset="ISO-8859-1">
+<title>500</title>
+<link rel="stylesheet"
+	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+	integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0="
+	crossorigin="anonymous" />
+<link rel="stylesheet"
+	href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+	<div class="container card mt-5 text-center">
+		<h3 class="card-header">
+			Something went <b>wrong</b>
+			<code>
+				<span th:text="${status}"></span> ERROR
+			</code>
+		</h3>
+		<table class="table table-hover table-bordered card-body">
+			<tr class="bg-info text-white">
+				<th>Default Attributes</th>
+				<th>Values</th>
+			</tr>
+			<tr>
+				<td>Status:</td>
+				<td th:text="${status}"></td>
+			</tr>
+			<tr>
+				<td>Timestamp:</td>
+				<td th:text="${timestamp}"></td>
+			</tr>
+			<tr>
+				<td>Error:</td>
+				<td th:text="${error}"></td>
+			</tr>
+			<tr>
+				<td>Path:</td>
+				<td th:text="${path}"></td>
+			</tr>
+
+		</table>
+		<div class="card-footer bg-success">
+			<a th:href="@{/employee/all}"
+				style="box-shadow: 1px 2px 22px 0px rgba(89, 87, 87, 0.85);"
+				class="btn btn-outline-success mr-3 bg-light">View All <i
+				class="fa fa-search  " aria-hidden="true"></i></a>
+		</div>
+	</div>
+</body>
+</html>
