@@ -6,6 +6,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import lombok.Data;
 
@@ -33,4 +34,13 @@ public class Employee {
 	
 	@Column(name="eta")
 	private Double ta;
+	
+	@Transient
+	private String captcha;
+	
+	@Transient
+	private String hidden;
+	
+	@Transient
+	private String image;
 }

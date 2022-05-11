@@ -20,10 +20,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.spring.mini.project.captcha.CaptchaUtil;
 import com.spring.mini.project.exception.CustomException;
 import com.spring.mini.project.exception.EmployeeNotFoundException;
 import com.spring.mini.project.model.Employee;
 import com.spring.mini.project.service.IEmployeeService;
+
+import cn.apiclub.captcha.Captcha;
 
 @Controller
 @RequestMapping("/employee")
@@ -34,6 +37,12 @@ public class EmployeeController {
 	@Autowired
 	private IEmployeeService service;
 
+	private void setupCaptcha(Employee e) {
+		Captcha cap = CaptchaUtil.createCaptcha(200, 80);
+		e.setHidden(cap.getAnswer());
+		e.setCaptcha("");
+		e.setImage(CaptchaUtil.encodeBase64(cap));
+	}
 	// Show Register Page
 	/**
 	 * If End-User enters /register, Get Type then we should display One Register
@@ -41,19 +50,33 @@ public class EmployeeController {
 	 */
 
 	@GetMapping("/register")
-	public String showReg() {
+	public String showReg(Model model) {
+		Employee e = new Employee();
+		setupCaptcha(e);
+		model.addAttribute("employee", e);
+		model.addAttribute("message", "");
 		return "EmployeeRegister";
 	}
 
 	// save(): Click Form Submit
 
 	@PostMapping("/save")
-	public String saveEmp(@ModelAttribute Employee employee, Model model) {
-		String message = null;
+	public String saveEmp(@ModelAttribute("employee") Employee employee, Model model) {
+		String message,page = null;
 		LOG.info("Entered Into Save Method");
 		try {
+			System.out.println(employee.getCaptcha());
+			System.out.println(employee.getHidden());
+			if(employee.getCaptcha().equals(employee.getHidden())) {
 		Integer id = service.saveEmployee(employee);
 		message= "Employee id: " + id + " is successfully saved";
+		page = "redirect:all";
+			}
+			else {
+				message="Captcha is incorrect";
+				setupCaptcha(employee);
+				page = "EmployeeRegister";
+			}
 		LOG.debug(message);
 		}catch (Exception e) {
 			e.printStackTrace();
@@ -62,7 +85,7 @@ public class EmployeeController {
 		}
 		LOG.info("Control Left the Save Method");
 		model.addAttribute("message", message);
-		return "EmployeeRegister";
+		return page;
 	}
 
 	// display all rows

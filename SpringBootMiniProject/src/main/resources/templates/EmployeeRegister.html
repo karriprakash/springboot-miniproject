@@ -22,19 +22,32 @@
 				<h3>Employee Register</h3>
 			</div>
 			<div class="card-body ">
-				<form th:action="@{/employee/save}" method="post" class="form">
-
+				<form th:action="@{/employee/save}" method="post" class="form" th:object="${employee}">
+					<input type="hidden" name="id" class="form-control" th:field=*{id}>
 					NAME:<input type="text" name="name" id="name" class="form-control"
-						required="required" /> <div id="nameError"></div> <br /> SAL :<input type="number"
-						name="salary" id="salary" class="form-control" required="required" />
+						required="required" th:field="*{name}"/> <div id="nameError" ></div> <br /> SAL :<input type="number"
+						name="salary" id="salary" class="form-control" required="required" th:field="*{salary}"/>
 					<br /> DEPT:<select name="department" id="department"
-						class="form-control" required="required">
+						class="form-control" required="required" th:field="*{department}">
 						<option value="">--SELECT--</option>
 						<option value="DEV">DEV</option>
 						<option value="QA">QA</option>
 						<option value="BA">BA</option>
 						<option value="TEST">TEST</option>
 					</select> <br />
+					Re-Enter Captcha:
+					<br>
+					<img alt="" th:src="*{'data:image/png;base64,'+ image}" class="image">
+					<br>
+					<br>
+					<input type="text" th:field="*{captcha}" class="form-control" placeholder="Enter Captcha Here..">
+					<br/>
+					<span th:if="${#strings.contains(message,'Captcha')}" th:text="${message}"
+					class="card-footer bg-danger text-center text-white font-weight-bold"></span>
+					<br th:if="${#strings.contains(message,'Captcha')}">
+					<br th:if="${#strings.contains(message,'Captcha')}"/>
+					<br/>
+					<input type="hidden" th:field="*{hidden}" class="form-control">
 					<button id="button" type="submit"
 						class="bg-primary text-white font-weight-bold btn btn-primary">
 						<i class="fa fa-plus-square" aria-hidden="true" ></i> ADD EMPLOYEE
@@ -44,9 +57,10 @@
 					</a>
 				</form>
 			</div>
-			<div class="card-footer bg-success" th:if="${message!=null}">
-				<span th:text="${message}"
-					class="card-footer text-center text-while "></span>
+			<div class="card-footer bg-success p-4" th:if="${message!=null}">
+				<span th:if="${#strings.contains(message,'Employee')}" th:text="${message}"
+					class="card-footer text-center text-white "></span>
+				
 			</div>
 		</div>
 	
